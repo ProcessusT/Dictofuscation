@@ -18,7 +18,8 @@ By default, the encoder takes a list of words from MIT, but you can also create 
 It calculates each hexadecimal value from 0x00 to 0xFF and associates a word with it. Then, each byte of your shellcode is converted to hexadecimal and encoded with the corresponding word.
 You can do the exact opposite in C# to get your shellcode.
 
-![](./assets/demo.png)
+<br>
+<img src="https://github.com/ProcessusT/Dictofuscation/raw/main/.assets/demo.png" width="100%;"><br>
 
 
 ## Source code
