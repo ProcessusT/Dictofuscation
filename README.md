@@ -1,7 +1,4 @@
 # Dictofuscation
----
-description: Defense Evasion
----
 
 
 # Code obfuscation with association dictionnary
