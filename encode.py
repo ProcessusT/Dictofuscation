@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+# Author : Processus Thief
+# https://github.com/ProcessusT/Dictofuscation
+# Version : 1.0
+
+
 import sys
 import requests
 import random
