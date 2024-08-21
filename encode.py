@@ -20,11 +20,15 @@ def main(input_file):
     random.shuffle(words)
     hex_values = [f'0x{i:02x}' for i in range(256)]
     word_dict = dict(zip(hex_values, words[:256]))
-    dict_items = [f'{{ "{hex_val}", {word}}}' for word, hex_val in word_dict.items()]
+
+    # Ajout d'une liste de mots "junk"
+    noise_words = words[260:512]  # Les mots pour le junk
+
+    dict_items = [f'{{ "{hex_val}", "{word}"}}' for hex_val, word in word_dict.items()]
     formatted_dict = "var wordDict = new Dictionary<string, byte>\n{\n    " + ",\n    ".join(dict_items) + "\n};"
     print("1. Copier-coller ce dictionnaire d'association dans le code C# : \n\n" + str(formatted_dict) + "\n\n")
 
-    # Encodage du payload
+    # Encodage du payload avec ajout de junk
     encoded_string = "string data = \""
     with open(input_file, 'rb') as f_in:
         byte = f_in.read(1)
@@ -32,6 +36,9 @@ def main(input_file):
             hex_value = f"0x{byte.hex()}"
             if hex_value in word_dict:
                 encoded_string += word_dict[hex_value] + ' '
+                # Ajout de junk de manière aléatoire
+                if random.choice([True, False]):
+                    encoded_string += random.choice(noise_words) + ' '
             byte = f_in.read(1)
     encoded_string = encoded_string.rstrip() + "\";"
     print("2. Utiliser ce payload obfusque dans votre code C# : \n\n" + str(encoded_string) + "\n\n")
@@ -44,14 +51,14 @@ def main(input_file):
         foreach (var word in words){
             if (wordDict.ContainsKey(word)){
                 byteList.Add(wordDict[word]);
-            }else{
-                Console.WriteLine("[!] Error while decoding");
+            } else {
+                // Ignorer le junk
+                Console.WriteLine("[!] junk ignored : " + word);
             }
         }
         return byteList.ToArray();
     }"""
     print("3. Copier-coller cette fonction de decodage dans le code C# : \n\n" + str(csharp_function) + "\n\n")
-    
 
 
 if __name__ == "__main__":
