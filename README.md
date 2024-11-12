@@ -24,11 +24,13 @@ You can do the exact opposite in C# to get your shellcode.
 
 ## COMPILATION
 <br />
-> For C# :
+
+# For C# :
     > Generate your RAW shellcode file<br />
     > Use the encoder to obfuscate it : python.exe .\encode_cs.py .\payload.bin<br />
     > Compile your C# dropper : csc.exe /target:library /platform:x64 /out:.\malware.dll .\generated_code.cs<br />
-> For C++ :
+
+# For C++ :
     > Generate your RAW shellcode file<br />
     > Use the encoder to obfuscate it : python.exe .\encode_cpp.py .\payload.bin<br />
     > Create a new C++ Console project in Visual Studio<br />
