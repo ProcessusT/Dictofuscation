@@ -48,4 +48,9 @@ You can do the exact opposite in C# to get your shellcode.
     > Use the encoder to obfuscate it : python.exe .\encode_vba.py .\payload.bin
     > Open word, create a new macro and paste the generated_macro.vba content in it
 
+# For ASPX :
+    > Generate your RAW shellcode file
+    > Use the encoder to obfuscate it : python.exe .\encode_aspx.py .\payload.bin
+    > Upload your generated_code.aspx in the IIS webroot and execute it
+
 <br /><br /><br />
