@@ -96,7 +96,7 @@ if __name__ == "__main__":
     print("########### VBA PAYLOAD OBFUSCATOR ###########")
     print("##############################################\n")
     if len(sys.argv) != 2:
-        print("Usage: python encode_vba.py <path_to_raw_payload_file>\n")
+        print("Usage: python encode_vba.py <path_to_raw_payload_file> <optional_path_to_wordlist_default_MIT_10K>\n")
         sys.exit(1)
     file_path = sys.argv[1]
     main(file_path)

